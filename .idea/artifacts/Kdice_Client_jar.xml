@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Kdice-Client:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Kdice_Client_jar</output-path>
+    <root id="archive" name="Kdice-Client.jar">
+      <element id="module-output" name="Kdice-Client" />
+    </root>
+  </artifact>
+</component>

@@ -13,6 +13,7 @@ public class Client {
     public static String orderServer = "6786786734";
     public static int counter = 0;
     public static int gameCounter = 0;
+    public static boolean isEliminated = false;
 
     public static void main(String[] args) {
 
@@ -48,9 +49,26 @@ public class Client {
 
                 while (true) {
                     start = player.getInputStream().readUTF();
-                    if(start.equals("KONIEC GRY")){
+                    if(start.startsWith("WYNIK")){
                         System.out.print(start);
                         return;
+                    }
+                    if(start.startsWith("ELIMINACJA")){
+                        isEliminated = true;
+                        continue;
+                    }
+                    if(start.startsWith("KONIEC RUNDY") && !isEliminated){
+                        System.out.println(start);
+                        isEliminated = false;
+                        continue;
+                    }
+                    else if(start.startsWith("KONIEC RUNDY") && isEliminated){
+                        isEliminated = false;
+                        continue;
+                    }
+                    if(start.startsWith("TURA")){
+                        System.out.println(start);
+                        continue;
                     }
                     //GENERATE BOARD FROM 25xCOMMAND
                     _board = GameLogic.genereteBoardFromStart(player);
@@ -80,7 +98,7 @@ public class Client {
                             }
 
 
-                            if (orderServer.equals("KONIEC RUNDY")) {
+                            if (orderServer.startsWith("KONIEC RUNDY")) {
                                 System.out.println(orderServer);
                                 end = true;
                             }
@@ -103,7 +121,9 @@ public class Client {
                     counter++;
                 }
             }
-        } catch (Exception e) {
+        } catch (ConnectException ce) {
+            System.out.println("Nie znaleziono serwera.");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

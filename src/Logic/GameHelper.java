@@ -4,28 +4,25 @@ import Models.FieldModel;
 import Models.PlayerModel;
 
 import java.awt.*;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameLogic
+public class GameHelper
 {
-    private static FieldModel[][] board;
     private static PlayerModel player;
 
-    public GameLogic(FieldModel[][] board, PlayerModel player){
-        this.board = board;
-        this.player = player;
+    public GameHelper(PlayerModel player){
+        GameHelper.player = player;
     }
 
     public static FieldModel[][] genereteBoardFromStart(PlayerModel player) throws IOException {
 
-        String board = " ";
+        StringBuilder board = new StringBuilder(" ");
         int start = 2;
         int end = 17;
         for (int i = 0; i < 25; i++) {
-            board = board + " " + player.getInputStream().readUTF();
+            board.append(" ").append(player.getInputStream().readUTF());
             System.out.println(board.substring(start,end));
             start = start + 16;
             end = end + 16;
@@ -38,7 +35,7 @@ public class GameLogic
                 _board[i][j] = new FieldModel();
              }
         }
-        String replaceString = board.replaceAll("\\s","");
+        String replaceString = board.toString().replaceAll("\\s","");
         String finalString = replaceString.replaceAll("[^0-9.]", "");
 
         _board[0][0].set_ownerId(Character.getNumericValue(finalString.charAt(2)));
@@ -440,25 +437,14 @@ public class GameLogic
         }
     }
 
-    public static void printBoard() throws IOException {
-        String board = " ";
-        int start = 2;
-        int end = 17;
-        for (int i = 0; i < 25; i++) {
-            board = board + " " + player.getInputStream().readUTF();
-            System.out.println(board.substring(start,end));
-            start = start + 16;
-            end = end + 16;
-        }
-    }
 
     public static FieldModel[][] genereteBoardAfterAttack() throws IOException {
 
-        String board = " ";
+        StringBuilder board = new StringBuilder(" ");
         int start = 2;
         int end = 17;
         for (int i = 0; i < 25; i++) {
-            board = board + " " + player.getInputStream().readUTF();
+            board.append(" ").append(player.getInputStream().readUTF());
             start = start + 16;
             end = end + 16;
         }
@@ -470,7 +456,7 @@ public class GameLogic
                 _board[i][j] = new FieldModel();
             }
         }
-        String replaceString = board.replaceAll("\\s","");
+        String replaceString = board.toString().replaceAll("\\s","");
         String finalString = replaceString.replaceAll("[^0-9.]", "");
 
         _board[0][0].set_ownerId(Character.getNumericValue(finalString.charAt(2)));
@@ -527,28 +513,7 @@ public class GameLogic
         return _board;
     }
 
-    public static void printBoard2() throws IOException {
-
-            for (int i = 0; i < 5 ; i++) {
-                for (int j = 0 ; j < 5 ; j++) {
-                    player.getOutputStream().writeUTF("PLANSZA " + i + " " + j + " " + board[i][j].get_ownerId() + " " + board[i][j].get_cubesNumber());
-                }
-            }
-        }
-
-    public FieldModel[][] get_board() {
-        return board;
-    }
-
-    public void set_board(FieldModel[][] _board) {
-        this.board = _board;
-    }
-
-    public PlayerModel get_player() {
-        return player;
-    }
-
-    public static void set_player(PlayerModel _player) {
+    private static void set_player(PlayerModel _player) {
         player = _player;
     }
 }
